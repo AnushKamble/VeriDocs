@@ -11,8 +11,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from veridocs.api.routes.health import router as health_router
+from veridocs.api.routes.filings import router as filings_router
+from veridocs.api.routes.query import router as query_router
+from veridocs.api.routes.evaluation import router as evaluation_router
 from veridocs.config.settings import settings
 from veridocs.utils.logging import correlation_id_ctx, logger
+
 
 
 @asynccontextmanager
@@ -60,8 +64,12 @@ async def correlation_id_middleware(request: Request, call_next):
         correlation_id_ctx.reset(token)
 
 
-# Include health and status routes
+# Include API routes
 app.include_router(health_router)
+app.include_router(filings_router)
+app.include_router(query_router)
+app.include_router(evaluation_router)
+
 
 
 @app.get("/")

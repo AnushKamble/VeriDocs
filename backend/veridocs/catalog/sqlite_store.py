@@ -299,10 +299,28 @@ class SQLiteCatalog:
                 diagnostics=json.loads(row["diagnostics_json"] or "[]"),
             )
 
-    def list_documents(self) -> List[FilingDocument]:
+    def list_documents(
+        self,
+        ticker: Optional[str] = None,
+        form_type: Optional[str] = None,
+    ) -> List[FilingDocument]:
         with self._get_connection() as conn:
-            rows = conn.execute("SELECT * FROM documents ORDER BY filing_date DESC").fetchall()
+            query = "SELECT * FROM documents"
+            params = []
+            conditions = []
+            if ticker:
+                conditions.append("ticker = ?")
+                params.append(ticker)
+            if form_type:
+                conditions.append("form_type = ?")
+                params.append(form_type)
+            if conditions:
+                query += " WHERE " + " AND ".join(conditions)
+            query += " ORDER BY filing_date DESC"
+
+            rows = conn.execute(query, params).fetchall()
             return [
+
                 FilingDocument(
                     document_id=r["document_id"],
                     cik=r["cik"],
@@ -441,7 +459,38 @@ class SQLiteCatalog:
                 for r in rows
             ]
 
+    def list_tables(self, document_id: str) -> List[TableRecord]:
+        with self._get_connection() as conn:
+            rows = conn.execute("SELECT * FROM tables WHERE document_id = ?", (document_id,)).fetchall()
+            return [
+                TableRecord(
+                    table_id=r["table_id"],
+                    document_id=r["document_id"],
+                    section_id=r["section_id"],
+                    caption=r["caption"],
+                    units_text=r["units_text"],
+                    source_locator=r["source_locator"],
+                    column_headers=json.loads(r["column_headers_json"] or "[]"),
+                    row_count=r["row_count"],
+                    column_count=r["column_count"],
+                    parse_warnings=json.loads(r["parse_warnings_json"] or "[]"),
+                )
+                for r in rows
+            ]
+
+    def list_sections(self, document_id: str) -> List[Dict[str, str]]:
+        with self._get_connection() as conn:
+            rows = conn.execute(
+                "SELECT DISTINCT section_id, section_title FROM chunks WHERE document_id = ?",
+                (document_id,),
+            ).fetchall()
+            return [
+                {"section_id": r["section_id"], "section_title": r["section_title"]}
+                for r in rows
+            ]
+
     def compute_corpus_hash(self) -> str:
+
         """Computes SHA-256 of sorted list of all chunk IDs and content hashes."""
         with self._get_connection() as conn:
             rows = conn.execute("SELECT chunk_id, content_hash FROM chunks ORDER BY chunk_id ASC").fetchall()

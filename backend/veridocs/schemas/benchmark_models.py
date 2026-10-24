@@ -54,3 +54,22 @@ class CalibrationClaim(BaseModel):
     gold_label: str  # "entailment", "contradiction", "neutral"
     category: str
     rationale: str
+
+
+class CompanyEntry(BaseModel):
+    ticker: str
+    cik: str
+    name: str
+
+
+class BenchmarkManifest(BaseModel):
+    benchmark_name: str
+    version: str
+    created_at: str
+    author: str
+    description: str
+    total_questions: int
+    splits: dict
+    question_distribution: dict
+    covered_companies: List[CompanyEntry]
+

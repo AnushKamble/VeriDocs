@@ -1,0 +1,328 @@
+{
+  "total_pairs": 20,
+  "optimal_entailment_threshold": 0.5,
+  "optimal_contradiction_threshold": 0.4,
+  "accuracy": 0.75,
+  "calibration_records": [
+    {
+      "id": "calib_001",
+      "premise": "Apple Inc. Total net sales were ,285 million in fiscal year 2023, compared to ,328 million in fiscal year 2022.",
+      "hypothesis": "Apple generated total net sales of ,285 million in fiscal 2023.",
+      "ground_truth_label": "entailment",
+      "category": "exact_match",
+      "notes": "Direct factual restatement of sales figure from 10-K.",
+      "predicted_scores": {
+        "entailment": 0.9983,
+        "contradiction": 0.0004,
+        "neutral": 0.0013,
+        "dominant_label": "entailment",
+        "premise_excerpt": "Apple Inc. Total net sales were ,285 million in fiscal year 2023, compared to ,328 million in fiscal year 2022.",
+        "hypothesis_text": "Apple generated total net sales of ,285 million in fiscal 2023."
+      }
+    },
+    {
+      "id": "calib_002",
+      "premise": "Apple Inc. Total net sales were ,285 million in fiscal year 2023, compared to ,328 million in fiscal year 2022.",
+      "hypothesis": "Apple generated total net sales of ,285 thousand in fiscal 2023.",
+      "ground_truth_label": "contradiction",
+      "category": "unit_mismatch",
+      "notes": "Unit scaled down by 1000x from millions to thousands.",
+      "predicted_scores": {
+        "entailment": 0.0321,
+        "contradiction": 0.965,
+        "neutral": 0.0029,
+        "dominant_label": "contradiction",
+        "premise_excerpt": "Apple Inc. Total net sales were ,285 million in fiscal year 2023, compared to ,328 million in fiscal year 2022.",
+        "hypothesis_text": "Apple generated total net sales of ,285 thousand in fiscal 2023."
+      }
+    },
+    {
+      "id": "calib_003",
+      "premise": "Microsoft Corp. Net income for the fiscal year ended June 30, 2023 was ,361 million, an increase of 6% compared to ,738 million in fiscal year 2022.",
+      "hypothesis": "Microsoft net income declined by 6% in fiscal 2023 compared to fiscal 2022.",
+      "ground_truth_label": "contradiction",
+      "category": "direction_inversion",
+      "notes": "Claim says declined when premise states increased.",
+      "predicted_scores": {
+        "entailment": 0.0013,
+        "contradiction": 0.9982,
+        "neutral": 0.0005,
+        "dominant_label": "contradiction",
+        "premise_excerpt": "Microsoft Corp. Net income for the fiscal year ended June 30, 2023 was ,361 million, an increase of 6% compared to ,738 million in fiscal year 2022.",
+        "hypothesis_text": "Microsoft net income declined by 6% in fiscal 2023 compared to fiscal 2022."
+      }
+    },
+    {
+      "id": "calib_004",
+      "premise": "Alphabet Inc. Operating income was ,293 million in 2023, representing an operating margin of 27%.",
+      "hypothesis": "Alphabet reported an operating margin of 27% in 2023.",
+      "ground_truth_label": "entailment",
+      "category": "exact_match",
+      "notes": "Exact margin match.",
+      "predicted_scores": {
+        "entailment": 0.9973,
+        "contradiction": 0.0002,
+        "neutral": 0.0026,
+        "dominant_label": "entailment",
+        "premise_excerpt": "Alphabet Inc. Operating income was ,293 million in 2023, representing an operating margin of 27%.",
+        "hypothesis_text": "Alphabet reported an operating margin of 27% in 2023."
+      }
+    },
+    {
+      "id": "calib_005",
+      "premise": "Alphabet Inc. Operating income was ,293 million in 2023, representing an operating margin of 27%.",
+      "hypothesis": "Alphabet operating margin was higher than Apple operating margin in 2023.",
+      "ground_truth_label": "neutral",
+      "category": "unsupported_comparison",
+      "notes": "Premise contains no data about Apple margin.",
+      "predicted_scores": {
+        "entailment": 0.0011,
+        "contradiction": 0.0006,
+        "neutral": 0.9983,
+        "dominant_label": "neutral",
+        "premise_excerpt": "Alphabet Inc. Operating income was ,293 million in 2023, representing an operating margin of 27%.",
+        "hypothesis_text": "Alphabet operating margin was higher than Apple operating margin in 2023."
+      }
+    },
+    {
+      "id": "calib_006",
+      "premise": "NVIDIA Corp. Compute & Networking revenue was ,405 million in fiscal 2024, compared to ,068 million in fiscal 2023, an increase of 215%.",
+      "hypothesis": "NVIDIA Compute & Networking revenue grew by over 200% year-over-year in fiscal 2024.",
+      "ground_truth_label": "entailment",
+      "category": "valid_paraphrase",
+      "notes": "215% is over 200%, valid entailment.",
+      "predicted_scores": {
+        "entailment": 0.996,
+        "contradiction": 0.0005,
+        "neutral": 0.0036,
+        "dominant_label": "entailment",
+        "premise_excerpt": "NVIDIA Corp. Compute & Networking revenue was ,405 million in fiscal 2024, compared to ,068 million in fiscal 2023, an increase of 215%.",
+        "hypothesis_text": "NVIDIA Compute & Networking revenue grew by over 200% year-over-year in fiscal 2024."
+      }
+    },
+    {
+      "id": "calib_007",
+      "premise": "NVIDIA Corp. Compute & Networking revenue was ,405 million in fiscal 2024, compared to ,068 million in fiscal 2023, an increase of 215%.",
+      "hypothesis": "NVIDIA Compute & Networking revenue was ,405 million in fiscal 2023.",
+      "ground_truth_label": "contradiction",
+      "category": "period_mismatch",
+      "notes": "Fiscal year attributed incorrectly to 2023 instead of 2024.",
+      "predicted_scores": {
+        "entailment": 0.2414,
+        "contradiction": 0.5526,
+        "neutral": 0.206,
+        "dominant_label": "contradiction",
+        "premise_excerpt": "NVIDIA Corp. Compute & Networking revenue was ,405 million in fiscal 2024, compared to ,068 million in fiscal 2023, an increase of 215%.",
+        "hypothesis_text": "NVIDIA Compute & Networking revenue was ,405 million in fiscal 2023."
+      }
+    },
+    {
+      "id": "calib_008",
+      "premise": "Apple Inc. Research and development expenses were ,915 million in 2023, ,251 million in 2022, and ,914 million in 2021.",
+      "hypothesis": "Apple R&D spending increased sequentially each year from 2021 through 2023.",
+      "ground_truth_label": "entailment",
+      "category": "valid_trend_inference",
+      "notes": "21914 < 26251 < 29915 shows strict sequential growth.",
+      "predicted_scores": {
+        "entailment": 0.0008,
+        "contradiction": 0.0049,
+        "neutral": 0.9944,
+        "dominant_label": "neutral",
+        "premise_excerpt": "Apple Inc. Research and development expenses were ,915 million in 2023, ,251 million in 2022, and ,914 million in 2021.",
+        "hypothesis_text": "Apple R&D spending increased sequentially each year from 2021 through 2023."
+      }
+    },
+    {
+      "id": "calib_009",
+      "premise": "Apple Inc. Research and development expenses were ,915 million in 2023, ,251 million in 2022, and ,914 million in 2021.",
+      "hypothesis": "Apple plan is to reduce R&D expenditures to under  billion by 2025.",
+      "ground_truth_label": "neutral",
+      "category": "forward_speculation",
+      "notes": "Premise reports historical expenses; no future guidance is present.",
+      "predicted_scores": {
+        "entailment": 0.0003,
+        "contradiction": 0.0104,
+        "neutral": 0.9893,
+        "dominant_label": "neutral",
+        "premise_excerpt": "Apple Inc. Research and development expenses were ,915 million in 2023, ,251 million in 2022, and ,914 million in 2021.",
+        "hypothesis_text": "Apple plan is to reduce R&D expenditures to under  billion by 2025."
+      }
+    },
+    {
+      "id": "calib_010",
+      "premise": "Microsoft Corp. Server products and cloud services revenue increased 19% driven by Azure and other cloud services revenue growth of 27%.",
+      "hypothesis": "Azure and other cloud services revenue grew by 27%.",
+      "ground_truth_label": "entailment",
+      "category": "exact_match",
+      "notes": "Direct excerpt from segment narrative.",
+      "predicted_scores": {
+        "entailment": 0.9973,
+        "contradiction": 0.0003,
+        "neutral": 0.0024,
+        "dominant_label": "entailment",
+        "premise_excerpt": "Microsoft Corp. Server products and cloud services revenue increased 19% driven by Azure and other cloud services revenue growth of 27%.",
+        "hypothesis_text": "Azure and other cloud services revenue grew by 27%."
+      }
+    },
+    {
+      "id": "calib_011",
+      "premise": "Microsoft Corp. Server products and cloud services revenue increased 19% driven by Azure and other cloud services revenue growth of 27%.",
+      "hypothesis": "Server products and cloud services revenue increased 27%.",
+      "ground_truth_label": "contradiction",
+      "category": "segment_metric_confusion",
+      "notes": "Server products grew 19%, not 27% (27% was Azure).",
+      "predicted_scores": {
+        "entailment": 0.8391,
+        "contradiction": 0.0655,
+        "neutral": 0.0954,
+        "dominant_label": "entailment",
+        "premise_excerpt": "Microsoft Corp. Server products and cloud services revenue increased 19% driven by Azure and other cloud services revenue growth of 27%.",
+        "hypothesis_text": "Server products and cloud services revenue increased 27%."
+      }
+    },
+    {
+      "id": "calib_012",
+      "premise": "Alphabet Inc. Capital expenditures were ,251 million for the year ended December 31, 2023, primarily reflecting investments in technical infrastructure.",
+      "hypothesis": "Alphabet spent ,251 million on capital expenditures in 2023.",
+      "ground_truth_label": "entailment",
+      "category": "exact_match",
+      "notes": "Exact figure for capex.",
+      "predicted_scores": {
+        "entailment": 0.998,
+        "contradiction": 0.0002,
+        "neutral": 0.0017,
+        "dominant_label": "entailment",
+        "premise_excerpt": "Alphabet Inc. Capital expenditures were ,251 million for the year ended December 31, 2023, primarily reflecting investments in technical infrastructur",
+        "hypothesis_text": "Alphabet spent ,251 million on capital expenditures in 2023."
+      }
+    },
+    {
+      "id": "calib_013",
+      "premise": "Alphabet Inc. Capital expenditures were ,251 million for the year ended December 31, 2023, primarily reflecting investments in technical infrastructure.",
+      "hypothesis": "Alphabet expects capital expenditures to exceed ,000 million in 2024.",
+      "ground_truth_label": "neutral",
+      "category": "unsupported_extrapolation",
+      "notes": "No 2024 guidance in premise.",
+      "predicted_scores": {
+        "entailment": 0.0004,
+        "contradiction": 0.001,
+        "neutral": 0.9986,
+        "dominant_label": "neutral",
+        "premise_excerpt": "Alphabet Inc. Capital expenditures were ,251 million for the year ended December 31, 2023, primarily reflecting investments in technical infrastructur",
+        "hypothesis_text": "Alphabet expects capital expenditures to exceed ,000 million in 2024."
+      }
+    },
+    {
+      "id": "calib_014",
+      "premise": "Apple Inc. Cash generated by operating activities was ,543 million for fiscal 2023, compared to ,151 million for fiscal 2022.",
+      "hypothesis": "Operating cash flow declined from 2022 to 2023.",
+      "ground_truth_label": "entailment",
+      "category": "directional_entailment",
+      "notes": "110543 < 122151 represents a decline.",
+      "predicted_scores": {
+        "entailment": 0.9736,
+        "contradiction": 0.0149,
+        "neutral": 0.0115,
+        "dominant_label": "entailment",
+        "premise_excerpt": "Apple Inc. Cash generated by operating activities was ,543 million for fiscal 2023, compared to ,151 million for fiscal 2022.",
+        "hypothesis_text": "Operating cash flow declined from 2022 to 2023."
+      }
+    },
+    {
+      "id": "calib_015",
+      "premise": "Apple Inc. Cash generated by operating activities was ,543 million for fiscal 2023, compared to ,151 million for fiscal 2022.",
+      "hypothesis": "Cash generated by operating activities grew by 10% in fiscal 2023.",
+      "ground_truth_label": "contradiction",
+      "category": "trend_contradiction",
+      "notes": "Operating cash flow decreased, not grew.",
+      "predicted_scores": {
+        "entailment": 0.0008,
+        "contradiction": 0.0027,
+        "neutral": 0.9965,
+        "dominant_label": "neutral",
+        "premise_excerpt": "Apple Inc. Cash generated by operating activities was ,543 million for fiscal 2023, compared to ,151 million for fiscal 2022.",
+        "hypothesis_text": "Cash generated by operating activities grew by 10% in fiscal 2023."
+      }
+    },
+    {
+      "id": "calib_016",
+      "premise": "NVIDIA Corp. Gross margin was 72.7% for fiscal year 2024, compared to 56.9% for fiscal year 2023.",
+      "hypothesis": "NVIDIA gross margin expanded by 15.8 percentage points in fiscal 2024.",
+      "ground_truth_label": "entailment",
+      "category": "arithmetic_entailment",
+      "notes": "72.7 - 56.9 = 15.8 percentage points.",
+      "predicted_scores": {
+        "entailment": 0.212,
+        "contradiction": 0.6231,
+        "neutral": 0.1649,
+        "dominant_label": "contradiction",
+        "premise_excerpt": "NVIDIA Corp. Gross margin was 72.7% for fiscal year 2024, compared to 56.9% for fiscal year 2023.",
+        "hypothesis_text": "NVIDIA gross margin expanded by 15.8 percentage points in fiscal 2024."
+      }
+    },
+    {
+      "id": "calib_017",
+      "premise": "NVIDIA Corp. Gross margin was 72.7% for fiscal year 2024, compared to 56.9% for fiscal year 2023.",
+      "hypothesis": "NVIDIA gross margin contracted to 56.9% in fiscal 2024.",
+      "ground_truth_label": "contradiction",
+      "category": "period_reversal",
+      "notes": "56.9% was 2023; in 2024 it was 72.7%.",
+      "predicted_scores": {
+        "entailment": 0.8941,
+        "contradiction": 0.0912,
+        "neutral": 0.0147,
+        "dominant_label": "entailment",
+        "premise_excerpt": "NVIDIA Corp. Gross margin was 72.7% for fiscal year 2024, compared to 56.9% for fiscal year 2023.",
+        "hypothesis_text": "NVIDIA gross margin contracted to 56.9% in fiscal 2024."
+      }
+    },
+    {
+      "id": "calib_018",
+      "premise": "Microsoft Corp. Total liabilities were ,753 million as of June 30, 2023.",
+      "hypothesis": "Microsoft stockholders equity was greater than its liabilities in 2023.",
+      "ground_truth_label": "neutral",
+      "category": "missing_entity_balance",
+      "notes": "Premise has total liabilities only; stockholders equity is not mentioned.",
+      "predicted_scores": {
+        "entailment": 0.0007,
+        "contradiction": 0.0037,
+        "neutral": 0.9957,
+        "dominant_label": "neutral",
+        "premise_excerpt": "Microsoft Corp. Total liabilities were ,753 million as of June 30, 2023.",
+        "hypothesis_text": "Microsoft stockholders equity was greater than its liabilities in 2023."
+      }
+    },
+    {
+      "id": "calib_019",
+      "premise": "Alphabet Inc. Hedging contracts: unrealized losses on derivative instruments recognized in other comprehensive income were 312 million.",
+      "hypothesis": "Alphabet recorded unrealized losses of  million on derivative instruments.",
+      "ground_truth_label": "entailment",
+      "category": "accounting_parentheses_entailment",
+      "notes": "312 million in accounting notation denotes a negative value / loss of .",
+      "predicted_scores": {
+        "entailment": 0.9749,
+        "contradiction": 0.0175,
+        "neutral": 0.0075,
+        "dominant_label": "entailment",
+        "premise_excerpt": "Alphabet Inc. Hedging contracts: unrealized losses on derivative instruments recognized in other comprehensive income were 312 million.",
+        "hypothesis_text": "Alphabet recorded unrealized losses of  million on derivative instruments."
+      }
+    },
+    {
+      "id": "calib_020",
+      "premise": "Alphabet Inc. Hedging contracts: unrealized losses on derivative instruments recognized in other comprehensive income were 312 million.",
+      "hypothesis": "Alphabet recorded an unrealized gain of  million on derivative instruments.",
+      "ground_truth_label": "contradiction",
+      "category": "sign_inversion",
+      "notes": "Parenthetical figure is a loss, not a gain.",
+      "predicted_scores": {
+        "entailment": 0.0019,
+        "contradiction": 0.9974,
+        "neutral": 0.0007,
+        "dominant_label": "contradiction",
+        "premise_excerpt": "Alphabet Inc. Hedging contracts: unrealized losses on derivative instruments recognized in other comprehensive income were 312 million.",
+        "hypothesis_text": "Alphabet recorded an unrealized gain of  million on derivative instruments."
+      }
+    }
+  ]
+}

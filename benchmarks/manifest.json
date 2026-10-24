@@ -1,0 +1,28 @@
+{
+  "benchmark_name": "VeriDocs-SEC-50",
+  "version": "1.0.0",
+  "created_at": "2026-10-24T20:30:00Z",
+  "author": "VeriDocs Evaluation & Research Team",
+  "description": "50 source-verified financial questions over SEC 10-K and 10-Q corporate filings covering narrative, table lookups, period comparisons, unit edge cases, and abstentions.",
+  "total_questions": 50,
+  "splits": {
+    "dev_calibration_count": 15,
+    "held_out_test_count": 35
+  },
+  "question_distribution": {
+    "numeric_table_lookup": 10,
+    "period_comparison": 8,
+    "units_sign_edge_case": 6,
+    "narrative_mda": 8,
+    "multi_evidence": 6,
+    "unanswerable": 6,
+    "ambiguous_period": 3,
+    "conflicting": 3
+  },
+  "covered_companies": [
+    {"ticker": "AAPL", "cik": "0000320193", "name": "Apple Inc."},
+    {"ticker": "MSFT", "cik": "0000789019", "name": "Microsoft Corp"},
+    {"ticker": "GOOGL", "cik": "0001652044", "name": "Alphabet Inc."},
+    {"ticker": "NVDA", "cik": "0001045810", "name": "NVIDIA Corp"}
+  ]
+}

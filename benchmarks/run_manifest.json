@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-10-24T16:04:11Z",
+  "environment": {
+    "os": "Windows",
+    "os_release": "10",
+    "machine": "AMD64",
+    "python_version": "3.11.9"
+  },
+  "models": {
+    "embedding_model": "BAAI/bge-small-en-v1.5",
+    "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+    "nli_model": "cross-encoder/nli-deberta-v3-small",
+    "generator_model": "qwen3:8b"
+  },
+  "parameters": {
+    "rrf_k0": 60,
+    "top_k_candidates": 5,
+    "reranker_top_k": 5,
+    "numeric_tolerance_relative": 0.001,
+    "bootstrap_resamples": 1000,
+    "random_seed": 42
+  }
+}

@@ -62,3 +62,5 @@ def setup_logger(name: str = "veridocs", level: str = "INFO") -> logging.Logger:
 
 
 logger = setup_logger()
+get_logger = setup_logger
+

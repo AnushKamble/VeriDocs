@@ -107,8 +107,12 @@ class DenseIndexer:
 
         return manifest
 
+    # Aliases
+    build = build_and_save_index
+
     @classmethod
     def load_index(
+
         cls,
         index_dir: Path,
     ) -> Tuple[faiss.IndexFlatIP, Dict[int, str], IndexManifest]:

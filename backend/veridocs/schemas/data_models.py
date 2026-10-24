@@ -102,3 +102,16 @@ class IndexManifest(BaseModel):
     source_corpus_hash: str
     faiss_index_checksum: str
     id_map_checksum: str
+
+
+class IngestionManifest(BaseModel):
+    document_id: str
+    status: DocumentStatus = DocumentStatus.PARSED
+    ingested_at: str
+    section_count: int
+    table_count: int
+    cell_count: int
+    chunk_count: int
+    corpus_hash: str
+    diagnostics: List[str] = Field(default_factory=list)
+

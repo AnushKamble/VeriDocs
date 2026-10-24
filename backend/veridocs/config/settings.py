@@ -69,6 +69,53 @@ class Settings(BaseSettings):
         self.data_dir.mkdir(parents=True, exist_ok=True)
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.artifacts_dir.mkdir(parents=True, exist_ok=True)
+        self.bm25_index_dir.mkdir(parents=True, exist_ok=True)
+        self.faiss_index_dir.mkdir(parents=True, exist_ok=True)
+
+    @property
+    def sqlite_db_path(self) -> Path:
+        return self.db_path
+
+    @property
+    def sec_cache_dir(self) -> Path:
+        return self.cache_dir
+
+    @property
+    def sec_rate_limit_per_second(self) -> float:
+        return self.sec_request_rate_limit
+
+    @property
+    def sec_request_timeout_seconds(self) -> float:
+        return self.sec_timeout_seconds
+
+    @property
+    def ollama_model_name(self) -> str:
+        return self.generator_model
+
+    @property
+    def generation_timeout_seconds(self) -> float:
+        return self.generator_timeout_seconds
+
+    @property
+    def nli_model_name(self) -> str:
+        return self.nli_model_id
+
+    @property
+    def reranker_model_name(self) -> str:
+        return self.reranker_model_id
+
+    @property
+    def bm25_index_dir(self) -> Path:
+        return self.artifacts_dir / "bm25"
+
+    @property
+    def faiss_index_dir(self) -> Path:
+        return self.artifacts_dir / "faiss"
+
+    @property
+    def enable_reranker(self) -> bool:
+        return True
+
 
 
 # Global settings singleton

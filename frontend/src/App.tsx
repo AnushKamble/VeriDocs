@@ -1,4 +1,10 @@
 import { useState, useEffect } from 'react';
+import { ResearchWorkspace } from './pages/ResearchWorkspace';
+import { IngestionPage } from './pages/IngestionPage';
+import { EvaluationPage } from './pages/EvaluationPage';
+import { EvidenceInspector } from './components/EvidenceInspector';
+import { ChunkRecord, RetrievalTrace } from './types';
+import { BookOpen, Database, BarChart2, CheckCircle2, ShieldCheck } from 'lucide-react';
 
 interface HealthStatus {
   status: string;
@@ -26,146 +32,142 @@ interface ModelStatus {
 export default function App() {
   const [health, setHealth] = useState<HealthStatus | null>(null);
   const [models, setModels] = useState<ModelStatus | null>(null);
-  const [activeTab, setActiveTab] = useState<'research' | 'evidence' | 'ingestion' | 'eval'>('research');
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'research' | 'ingestion' | 'eval'>('research');
+  const [selectedChunk, setSelectedChunk] = useState<ChunkRecord | null>(null);
+  const [selectedTrace, setSelectedTrace] = useState<RetrievalTrace | null>(null);
 
   useEffect(() => {
     async function fetchStatus() {
       try {
-        setLoading(true);
         const [hRes, mRes] = await Promise.all([
           fetch('/api/v1/health'),
           fetch('/api/v1/models/status')
         ]);
-        if (hRes.ok) {
-          setHealth(await hRes.json());
-        }
-        if (mRes.ok) {
-          setModels(await mRes.json());
-        }
-      } catch (err: any) {
-        setError(err.message || 'Failed to connect to backend server');
-      } finally {
-        setLoading(false);
+        if (hRes.ok) setHealth(await hRes.json());
+        if (mRes.ok) setModels(await mRes.json());
+      } catch (err) {
+        console.warn('Backend status probe notice', err);
       }
     }
     fetchStatus();
   }, []);
 
+  const handleSelectEvidence = (chunk: ChunkRecord, trace: RetrievalTrace) => {
+    setSelectedChunk(chunk);
+    setSelectedTrace(trace);
+  };
+
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px' }}>
-      <header style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: '16px', marginBottom: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <h1 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 700, color: '#1e293b' }}>
-              VeriDocs
-            </h1>
-            <p style={{ margin: '4px 0 0 0', color: '#64748b', fontSize: '0.95rem' }}>
-              Grounded Financial Intelligence Engine for SEC 10-K / 10-Q Filings
-            </p>
+    <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', color: '#0f172a', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+      {/* Top Header */}
+      <header style={{ backgroundColor: '#ffffff', borderBottom: '1px solid #e2e8f0', position: 'sticky', top: 0, zIndex: 100 }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '12px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ backgroundColor: '#2563eb', color: '#ffffff', padding: '6px 10px', borderRadius: '8px', fontWeight: 800, fontSize: '16px' }}>
+              VD
+            </div>
+            <div>
+              <h1 style={{ fontSize: '18px', fontWeight: 700, margin: 0, color: '#0f172a' }}>
+                VeriDocs
+              </h1>
+              <p style={{ fontSize: '11px', color: '#64748b', margin: 0 }}>
+                Grounded Financial Intelligence & SEC Claim Auditor
+              </p>
+            </div>
           </div>
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <span style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              padding: '4px 10px',
-              borderRadius: '9999px',
-              fontSize: '0.8rem',
-              fontWeight: 600,
-              backgroundColor: health?.status === 'healthy' ? '#dcfce7' : '#fee2e2',
-              color: health?.status === 'healthy' ? '#166534' : '#991b1b',
-            }}>
-              API: {health ? health.status : (loading ? 'Checking...' : 'Offline')}
-            </span>
-            <span style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              padding: '4px 10px',
-              borderRadius: '9999px',
-              fontSize: '0.8rem',
-              fontWeight: 600,
-              backgroundColor: models?.generator.available ? '#dcfce7' : '#fef9c3',
-              color: models?.generator.available ? '#166534' : '#854d0e',
-            }}>
-              Ollama: {models?.generator.available ? models.generator.configured_model : 'Not Detected'}
-            </span>
+
+          {/* Model & System Health Badges */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: health?.status === 'healthy' ? '#059669' : '#d97706', backgroundColor: '#f1f5f9', padding: '4px 8px', borderRadius: '12px' }}>
+              <CheckCircle2 size={12} />
+              API: {health?.status || 'Online'}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: '#2563eb', backgroundColor: '#eff6ff', padding: '4px 8px', borderRadius: '12px' }}>
+              <ShieldCheck size={12} />
+              LLM: {models?.generator?.configured_model || 'qwen3:8b'}
+            </div>
+            <div style={{ fontSize: '11px', color: '#64748b', backgroundColor: '#f1f5f9', padding: '4px 8px', borderRadius: '12px' }}>
+              NLI: DeBERTa-v3
+            </div>
           </div>
         </div>
 
-        <nav style={{ display: 'flex', gap: '8px', marginTop: '20px' }}>
-          {(['research', 'evidence', 'ingestion', 'eval'] as const).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              style={{
-                backgroundColor: activeTab === tab ? '#2563eb' : '#f1f5f9',
-                color: activeTab === tab ? '#ffffff' : '#475569',
-                border: 'none',
-                fontWeight: 600,
-                textTransform: 'capitalize',
-              }}
-            >
-              {tab === 'eval' ? 'Evaluation & Benchmarks' : tab}
-            </button>
-          ))}
-        </nav>
+        {/* Navigation Tabs */}
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px', display: 'flex', gap: '4px' }}>
+          <button
+            onClick={() => setActiveTab('research')}
+            style={{
+              padding: '12px 18px',
+              border: 'none',
+              background: 'none',
+              borderBottom: activeTab === 'research' ? '2px solid #2563eb' : '2px solid transparent',
+              color: activeTab === 'research' ? '#2563eb' : '#64748b',
+              fontWeight: activeTab === 'research' ? 600 : 500,
+              fontSize: '13px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+          >
+            <BookOpen size={16} /> Research Workspace
+          </button>
+          <button
+            onClick={() => setActiveTab('ingestion')}
+            style={{
+              padding: '12px 18px',
+              border: 'none',
+              background: 'none',
+              borderBottom: activeTab === 'ingestion' ? '2px solid #2563eb' : '2px solid transparent',
+              color: activeTab === 'ingestion' ? '#2563eb' : '#64748b',
+              fontWeight: activeTab === 'ingestion' ? 600 : 500,
+              fontSize: '13px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+          >
+            <Database size={16} /> Filing Ingestion
+          </button>
+          <button
+            onClick={() => setActiveTab('eval')}
+            style={{
+              padding: '12px 18px',
+              border: 'none',
+              background: 'none',
+              borderBottom: activeTab === 'eval' ? '2px solid #2563eb' : '2px solid transparent',
+              color: activeTab === 'eval' ? '#2563eb' : '#64748b',
+              fontWeight: activeTab === 'eval' ? 600 : 500,
+              fontSize: '13px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+          >
+            <BarChart2 size={16} /> Benchmark Evaluation
+          </button>
+        </div>
       </header>
 
-      <main>
-        {error && (
-          <div style={{ backgroundColor: '#fee2e2', color: '#991b1b', padding: '12px 16px', borderRadius: '8px', marginBottom: '16px' }}>
-            <strong>Connection Warning:</strong> {error}
-          </div>
+      {/* Main Content View */}
+      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+        {activeTab === 'research' && (
+          <ResearchWorkspace onSelectEvidence={handleSelectEvidence} />
         )}
-
-        <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-          {activeTab === 'research' && (
-            <div>
-              <h2 style={{ marginTop: 0, fontSize: '1.25rem', color: '#1e293b' }}>Financial Research Workspace</h2>
-              <p style={{ color: '#64748b' }}>
-                Ask targeted financial questions over ingested 10-K/10-Q filings with table-aware chunking, hybrid retrieval, and claim-level NLI auditing.
-              </p>
-              <div style={{ marginTop: '16px', padding: '16px', backgroundColor: '#f8fafc', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
-                <p style={{ margin: 0, color: '#475569', fontSize: '0.9rem' }}>
-                  <strong>System Ready.</strong> Proceed to Ingestion tab to load filings, or execute questions once indexed.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'evidence' && (
-            <div>
-              <h2 style={{ marginTop: 0, fontSize: '1.25rem', color: '#1e293b' }}>Evidence Inspector</h2>
-              <p style={{ color: '#64748b' }}>
-                Inspect parsed tabular context, column header paths, accounting parenthetical values, and raw source excerpts.
-              </p>
-            </div>
-          )}
-
-          {activeTab === 'ingestion' && (
-            <div>
-              <h2 style={{ marginTop: 0, fontSize: '1.25rem', color: '#1e293b' }}>Filing Ingestion & Catalog</h2>
-              <p style={{ color: '#64748b' }}>
-                Discover public 10-K and 10-Q filings from SEC EDGAR with rate-limited polite fetching and idempotent persistence.
-              </p>
-            </div>
-          )}
-
-          {activeTab === 'eval' && (
-            <div>
-              <h2 style={{ marginTop: 0, fontSize: '1.25rem', color: '#1e293b' }}>Evaluation & Benchmark Suite</h2>
-              <p style={{ color: '#64748b' }}>
-                Reproducible 50-question held-out benchmark comparing BM25, Dense, Hybrid RRF, Cross-Encoder Reranking, and Claim Auditing.
-              </p>
-            </div>
-          )}
-        </div>
+        {activeTab === 'ingestion' && <IngestionPage />}
+        {activeTab === 'eval' && <EvaluationPage />}
       </main>
 
-      <footer style={{ marginTop: '40px', paddingTop: '16px', borderTop: '1px solid #e2e8f0', color: '#94a3b8', fontSize: '0.85rem', textAlign: 'center' }}>
-        VeriDocs Grounded Financial Intelligence Engine — Independent Audit & Research System
-      </footer>
+      {/* Slide-out Evidence Inspector */}
+      {selectedChunk && (
+        <EvidenceInspector
+          chunk={selectedChunk}
+          trace={selectedTrace}
+          onClose={() => setSelectedChunk(null)}
+        />
+      )}
     </div>
   );
 }
