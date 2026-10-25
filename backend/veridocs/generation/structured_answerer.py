@@ -66,12 +66,24 @@ class StructuredAnswerer:
         prompt = build_generation_prompt(query, retrieved_evidence)
         valid_chunk_ids: Set[str] = {c.chunk_id for c in retrieved_evidence}
 
-        gen_result = await self.provider.generate(
-            prompt=prompt,
-            system_prompt=SYSTEM_PROMPT,
-            schema=GeneratorRawOutput,
-            temperature=temperature,
-        )
+        try:
+            gen_result = await self.provider.generate(
+                prompt=prompt,
+                system_prompt=SYSTEM_PROMPT,
+                schema=GeneratorRawOutput,
+                temperature=temperature,
+            )
+        except Exception as e:
+            logger.error(f"Generation provider error: {e}")
+            return StructuredAnswerResult(
+                summary=f"Generation error: {type(e).__name__} encountered during model inference.",
+                claims=[],
+                limitations=[f"Generation provider failed: {str(e)}"],
+                answer_status=AnswerStatus.GENERATION_ERROR,
+                raw_response="",
+                latency_ms=0.0,
+                model_name=getattr(self.provider, "model_name", "unknown"),
+            )
 
         parsed_data = gen_result.parsed_json
         raw_text = gen_result.raw_text
@@ -140,7 +152,11 @@ class StructuredAnswerer:
         elif len(validated_claims) == 0:
             # If no claims could be grounded from evidence, engine must abstain
             answer_status = AnswerStatus.ABSTAINED
-        elif any_invalid_citations and all(c.audit_status == AuditStatus.INVALID_CITATION for c in validated_claims):
+        elif all(c.audit_status == AuditStatus.INVALID_CITATION for c in validated_claims):
+            # If every claim cites hallucinated or invalid chunk IDs, engine must abstain
+            answer_status = AnswerStatus.ABSTAINED
+        elif any_invalid_citations:
+            # Some claims have invalid citations while others cite valid evidence
             answer_status = AnswerStatus.PARTIALLY_SUPPORTED
         else:
             answer_status = AnswerStatus.ANSWERED

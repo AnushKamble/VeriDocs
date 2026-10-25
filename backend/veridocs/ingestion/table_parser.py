@@ -26,6 +26,7 @@ class TableParser:
         self.document_id = document_id
         self.section_id = section_id
         self.parse_warnings: List[str] = []
+        self.footnotes: List[str] = []
 
     def _extract_caption_and_units(self) -> Tuple[str, Optional[str]]:
         """Extracts table caption and declared unit statement."""
@@ -144,8 +145,17 @@ class TableParser:
                 row_count=0,
                 column_count=0,
                 parse_warnings=self.parse_warnings,
+                footnotes=self.footnotes,
             )
             return record, []
+
+        # Check for explicit <tfoot> tags
+        tfoot = self.table_tag.find("tfoot")
+        if tfoot:
+            for tr in tfoot.find_all("tr"):
+                txt = tr.get_text(" ", strip=True)
+                if txt and txt not in self.footnotes:
+                    self.footnotes.append(txt)
 
         # Partition header rows vs data rows
         # Standard financial tables have 1 to 4 header rows
@@ -177,11 +187,25 @@ class TableParser:
         # Parse data rows and cells
         cells: List[TableCell] = []
         current_category = ""
+        footnote_pattern = re.compile(
+            r"^\s*(\(\d+\)|\([a-zA-Z]\)|[*†‡§#]+|Note\s*\d*:|Notes:)",
+            re.IGNORECASE,
+        )
 
         for r_idx in range(num_header_rows, len(grid)):
             row = grid[r_idx]
             non_empty_cells = [c for c in row if c["text"].strip()]
             if not non_empty_cells:
+                continue
+
+            # Check if this row is a footnote row (e.g. at bottom or spanning note)
+            cell_texts = [c["text"].strip() for c in non_empty_cells]
+            comb_text = " ".join(dict.fromkeys(cell_texts))
+            is_footnote_prefix = bool(footnote_pattern.match(comb_text))
+
+            if is_footnote_prefix and (len(set(cell_texts)) <= 2 or r_idx >= len(grid) - 4):
+                if comb_text and comb_text not in self.footnotes:
+                    self.footnotes.append(comb_text)
                 continue
 
             # Check if this row is a section divider / category header spanning the row
@@ -236,6 +260,7 @@ class TableParser:
             row_count=len(grid) - num_header_rows,
             column_count=num_cols,
             parse_warnings=self.parse_warnings,
+            footnotes=self.footnotes,
         )
 
         return record, cells

@@ -76,7 +76,8 @@ class SQLiteCatalog:
                 column_headers_json TEXT NOT NULL,
                 row_count INTEGER NOT NULL,
                 column_count INTEGER NOT NULL,
-                parse_warnings_json TEXT
+                parse_warnings_json TEXT,
+                footnotes_json TEXT
             );
 
             CREATE TABLE IF NOT EXISTS cells (
@@ -125,6 +126,12 @@ class SQLiteCatalog:
             CREATE INDEX IF NOT EXISTS idx_chunks_doc ON chunks(document_id);
             CREATE INDEX IF NOT EXISTS idx_cells_table ON cells(table_id);
             """)
+
+            # Ensure schema migration for existing databases
+            try:
+                conn.execute("ALTER TABLE tables ADD COLUMN footnotes_json TEXT")
+            except sqlite3.OperationalError:
+                pass
 
     def save_document(
         self,
@@ -194,6 +201,7 @@ class SQLiteCatalog:
                         t.row_count,
                         t.column_count,
                         json.dumps(t.parse_warnings),
+                        json.dumps(t.footnotes),
                     )
                     for t in tables
                 ]
@@ -202,8 +210,8 @@ class SQLiteCatalog:
                     INSERT INTO tables (
                         table_id, document_id, section_id, caption, units_text,
                         source_locator, column_headers_json, row_count, column_count,
-                        parse_warnings_json
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        parse_warnings_json, footnotes_json
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     table_params,
                 )
@@ -474,6 +482,7 @@ class SQLiteCatalog:
                     row_count=r["row_count"],
                     column_count=r["column_count"],
                     parse_warnings=json.loads(r["parse_warnings_json"] or "[]"),
+                    footnotes=json.loads(r["footnotes_json"] or "[]") if ("footnotes_json" in r.keys() and r["footnotes_json"]) else [],
                 )
                 for r in rows
             ]

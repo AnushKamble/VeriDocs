@@ -102,11 +102,11 @@ def test_numeric_comparator_period_mismatch():
 
 
 def test_numeric_comparator_narrative_claim():
-    # Narrative claim without numbers should be deferred to NLI
+    # Narrative claim without numbers should be deferred to NLI, NOT marked numerically verified
     chunk = create_mock_chunk("The company experienced supply chain disruptions.")
     claim = "Supply chain disruptions affected delivery times."
     eval_res = NumericComparator.audit_claim(claim, [chunk])
 
-    assert eval_res.is_verified is True
-    assert eval_res.status == AuditStatus.SUPPORTED
-    assert "deferred to NLI" in eval_res.summary
+    assert eval_res.is_verified is False
+    assert eval_res.status == AuditStatus.NEEDS_REVIEW
+    assert "requires NLI audit" in eval_res.summary

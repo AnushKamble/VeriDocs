@@ -1,6 +1,6 @@
 # VeriDocs Benchmark Evaluation Report
 
-**Execution Timestamp:** `2026-10-24T16:04:11Z`  
+**Execution Timestamp:** `2026-10-25T05:02:27Z`  
 **Environment:** Python `3.11.9` on `Windows` AMD64  
 **Benchmark Dataset:** `VeriDocs-SEC-50` (Evaluation Split: `dev`, N = 2)  
 **Models:** Embedding (`BAAI/bge-small-en-v1.5`), Reranker (`cross-encoder/ms-marco-MiniLM-L-6-v2`), NLI (`cross-encoder/nli-deberta-v3-small`), Generator (`qwen3:8b`)  
@@ -17,9 +17,11 @@ This report documents empirical, reproducible performance across the six canonic
 
 | Baseline Strategy | Recall@1 | Recall@3 | Recall@5 | Recall@10 | MRR | nDCG@5 | Latency (ms) | 95% CI (Recall@5) |
 |---|---|---|---|---|---|---|---|---|
-| `bm25_structured` | 0.0000 | 0.5000 | 0.5000 | 0.5000 | 0.2500 | 0.3155 | 7.7 | [0.0000, 1.0000] |
-| `dense_bge` | 0.0000 | 0.5000 | 0.5000 | 0.5000 | 0.2500 | 0.3155 | 2699.1 | [0.0000, 1.0000] |
-| `hybrid_rrf` | 0.0000 | 0.5000 | 0.5000 | 0.5000 | 0.2500 | 0.3155 | 35.5 | [0.0000, 1.0000] |
+| `bm25_structured` | 0.0000 | 0.5000 | 0.5000 | 0.5000 | 0.2500 | 0.3155 | 5.7 | [0.0000, 1.0000] |
+| `dense_bge` | 0.0000 | 0.5000 | 0.5000 | 0.5000 | 0.2500 | 0.3155 | 2975.2 | [0.0000, 1.0000] |
+| `hybrid_rrf` | 0.0000 | 0.5000 | 0.5000 | 0.5000 | 0.2500 | 0.3155 | 41.0 | [0.0000, 1.0000] |
+| `hybrid_reranked` | 0.0000 | 0.5000 | 0.5000 | 0.5000 | 0.2500 | 0.3155 | 36.2 | [0.0000, 1.0000] |
+| `full_system` | 0.0000 | 0.5000 | 0.5000 | 0.5000 | 0.2500 | 0.3155 | 29771.8 | [0.0000, 1.0000] |
 
 ---
 
@@ -27,6 +29,8 @@ This report documents empirical, reproducible performance across the six canonic
 
 | System Configuration | Numeric Exactness | Citation Precision | Abstention Accuracy | Mean Latency (ms) |
 |---|---|---|---|---|
+| `hybrid_reranked` | 1.0000 | 1.0000 | 1.0000 | 36.2 |
+| `full_system` | 0.5000 | 1.0000 | 0.5000 | 29771.8 |
 
 ---
 

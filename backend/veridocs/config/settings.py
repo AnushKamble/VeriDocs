@@ -36,7 +36,19 @@ class Settings(BaseSettings):
     # Local LLM Generator (Ollama)
     ollama_base_url: str = Field(default="http://localhost:11434")
     generator_model: str = Field(default="qwen3:8b")
-    generator_timeout_seconds: float = Field(default=60.0)
+    generator_timeout_seconds: float = Field(default=120.0)
+
+    @property
+    def ollama_model_name(self) -> str:
+        return self.generator_model
+
+    @property
+    def generation_timeout_seconds(self) -> float:
+        return self.generator_timeout_seconds
+
+    @property
+    def nli_model_name(self) -> str:
+        return self.nli_model_id
 
     # Embeddings, Reranker & NLI Models
     embedding_model_id: str = Field(default="BAAI/bge-small-en-v1.5")

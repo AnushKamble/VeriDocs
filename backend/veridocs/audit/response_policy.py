@@ -13,6 +13,7 @@ from veridocs.schemas.query_models import (
     AnswerStatus,
     AtomicClaim,
     AuditStatus,
+    ClaimKind,
 )
 from veridocs.audit.numeric_comparator import NumericAuditEvaluation, NumericComparator
 
@@ -153,11 +154,15 @@ class ResponsePolicyEngine:
                 c.audit_reason = f"NLI entailment score {c.nli_entailment_score:.3f} >= threshold {self.thresholds.entailment_threshold:.3f}"
                 return c
 
-        # Precedence 5: Insufficient Evidence / Needs Review
-        # If numeric check passed and no NLI score was generated:
-        if num_eval.is_verified and c.nli_entailment_score is None:
+        # Precedence 5: Numeric verification or Insufficient Evidence
+        # Only mark SUPPORTED if actual numeric figures existed and were verified:
+        if num_eval.is_verified and len(num_eval.verified_facts) > 0:
             c.audit_status = AuditStatus.SUPPORTED
-            c.audit_reason = "Numerically verified against source evidence."
+            c.audit_reason = f"Numerically verified against source evidence: {'; '.join(num_eval.verified_facts)}"
+        elif c.nli_entailment_score is None:
+            # Missing NLI cannot verify narrative claims
+            c.audit_status = AuditStatus.AUDITOR_UNAVAILABLE if c.claim_kind == ClaimKind.NARRATIVE else AuditStatus.INSUFFICIENT_EVIDENCE
+            c.audit_reason = "NLI auditor unavailable; narrative claim cannot be verified without natural language entailment."
         else:
             c.audit_status = AuditStatus.INSUFFICIENT_EVIDENCE
             c.audit_reason = "Evidence is insufficient to confirm or refute claim."

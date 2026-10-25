@@ -18,16 +18,22 @@ MANDATORY RULES:
 
 
 def format_chunk_for_evidence(chunk: ChunkRecord) -> str:
-    """Format a single chunk record with clear provenance demarcation."""
+    """Format a single chunk record with clear provenance demarcation and boundary escaping."""
     section = chunk.section_title or chunk.section_id or "Unknown Section"
     is_table = "TABLE" if chunk.chunk_kind in [ChunkKind.TABLE_GROUP, ChunkKind.TABLE_ROW] else "NARRATIVE"
     units_info = f" | Units: {chunk.units}" if chunk.units else ""
     table_info = f" | Table: {chunk.table_id}" if chunk.table_id else ""
 
+    # Sanitize content against tag breakout injection
+    safe_text = (
+        chunk.text.replace("</evidence_chunk>", "[/evidence_chunk]")
+        .replace("<evidence_chunk", "[evidence_chunk")
+    )
+
     return f"""<evidence_chunk id="{chunk.chunk_id}" type="{is_table}">
 Source: Document {chunk.document_id} | Section: {section}{table_info}{units_info} | Locator: {chunk.source_locator}
 Content:
-{chunk.text}
+{safe_text}
 </evidence_chunk>"""
 
 

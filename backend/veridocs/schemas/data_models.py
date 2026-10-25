@@ -69,6 +69,7 @@ class TableRecord(BaseModel):
     row_count: int = 0
     column_count: int = 0
     parse_warnings: List[str] = Field(default_factory=list)
+    footnotes: List[str] = Field(default_factory=list)
 
 
 class ChunkRecord(BaseModel):
@@ -88,6 +89,7 @@ class ChunkRecord(BaseModel):
     source_url: str
     source_locator: str
     content_hash: str
+    footnotes: List[str] = Field(default_factory=list)
 
 
 class IndexManifest(BaseModel):

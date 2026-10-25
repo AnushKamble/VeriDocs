@@ -157,7 +157,8 @@ async def test_structured_answerer_hallucinated_citation_detected():
     claim = result.claims[0]
     assert claim.audit_status == AuditStatus.INVALID_CITATION
     assert "chk_999_fake" in claim.audit_reason
-    assert result.answer_status == AnswerStatus.PARTIALLY_SUPPORTED
+    # When all claims cite invalid/hallucinated chunk IDs, engine must abstain
+    assert result.answer_status == AnswerStatus.ABSTAINED
 
 
 @pytest.mark.asyncio

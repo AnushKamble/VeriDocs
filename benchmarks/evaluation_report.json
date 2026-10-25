@@ -1,8 +1,8 @@
 {
   "split": "dev",
   "total_questions": 2,
-  "start_time": "2026-10-24T16:04:05Z",
-  "end_time": "2026-10-24T16:04:11Z",
+  "start_time": "2026-10-25T05:01:21Z",
+  "end_time": "2026-10-25T05:02:27Z",
   "metrics_summary": {
     "bm25_structured": {
       "mrr": 0.25,
@@ -14,7 +14,7 @@
       "numeric_exactness": 1.0,
       "citation_precision": 1.0,
       "abstention_accuracy": 1.0,
-      "mean_latency_ms": 7.73,
+      "mean_latency_ms": 5.72,
       "confidence_intervals_95": {
         "mrr": [
           0.0,
@@ -44,7 +44,7 @@
       "numeric_exactness": 1.0,
       "citation_precision": 1.0,
       "abstention_accuracy": 1.0,
-      "mean_latency_ms": 2699.06,
+      "mean_latency_ms": 2975.16,
       "confidence_intervals_95": {
         "mrr": [
           0.0,
@@ -74,7 +74,7 @@
       "numeric_exactness": 1.0,
       "citation_precision": 1.0,
       "abstention_accuracy": 1.0,
-      "mean_latency_ms": 35.55,
+      "mean_latency_ms": 41.02,
       "confidence_intervals_95": {
         "mrr": [
           0.0,
@@ -90,6 +90,70 @@
         ],
         "abstention_accuracy": [
           1.0,
+          1.0
+        ]
+      }
+    },
+    "hybrid_reranked": {
+      "mrr": 0.25,
+      "recall_at_1": 0.0,
+      "recall_at_3": 0.5,
+      "recall_at_5": 0.5,
+      "recall_at_10": 0.5,
+      "ndcg_at_5": 0.3155,
+      "numeric_exactness": 1.0,
+      "citation_precision": 1.0,
+      "abstention_accuracy": 1.0,
+      "mean_latency_ms": 36.2,
+      "confidence_intervals_95": {
+        "mrr": [
+          0.0,
+          0.5
+        ],
+        "recall_at_5": [
+          0.0,
+          1.0
+        ],
+        "ndcg_at_5": [
+          0.0,
+          0.6309
+        ],
+        "abstention_accuracy": [
+          1.0,
+          1.0
+        ]
+      }
+    },
+    "full_system": {
+      "mrr": 0.25,
+      "recall_at_1": 0.0,
+      "recall_at_3": 0.5,
+      "recall_at_5": 0.5,
+      "recall_at_10": 0.5,
+      "ndcg_at_5": 0.3155,
+      "numeric_exactness": 0.5,
+      "citation_precision": 1.0,
+      "abstention_accuracy": 0.5,
+      "mean_latency_ms": 29771.82,
+      "confidence_intervals_95": {
+        "mrr": [
+          0.0,
+          0.5
+        ],
+        "recall_at_5": [
+          0.0,
+          1.0
+        ],
+        "ndcg_at_5": [
+          0.0,
+          0.6309
+        ],
+        "abstention_accuracy": [
+          0.0,
+          1.0
+        ],
+        "numeric_exactness": [
+          0.0,
           1.0
         ]
       }
@@ -125,11 +189,11 @@
         "is_answerable": true,
         "abstention_correct": null,
         "stage_timings_ms": {
-          "retrieval_ms": 8.0,
-          "bm25_ms": 6.9,
-          "total_retrieval_ms": 7.95
+          "retrieval_ms": 6.19,
+          "bm25_ms": 5.41,
+          "total_retrieval_ms": 6.14
         },
-        "total_latency_ms": 8.12
+        "total_latency_ms": 6.29
       },
       {
         "question_id": "q02",
@@ -157,11 +221,11 @@
         "is_answerable": true,
         "abstention_correct": null,
         "stage_timings_ms": {
-          "retrieval_ms": 7.24,
-          "bm25_ms": 6.07,
-          "total_retrieval_ms": 7.19
+          "retrieval_ms": 5.08,
+          "bm25_ms": 4.36,
+          "total_retrieval_ms": 5.05
         },
-        "total_latency_ms": 7.34
+        "total_latency_ms": 5.15
       }
     ],
     "dense_bge": [
@@ -193,11 +257,11 @@
         "is_answerable": true,
         "abstention_correct": null,
         "stage_timings_ms": {
-          "retrieval_ms": 5365.08,
-          "dense_ms": 5363.84,
-          "total_retrieval_ms": 5365.02
+          "retrieval_ms": 5914.22,
+          "dense_ms": 5913.11,
+          "total_retrieval_ms": 5914.17
         },
-        "total_latency_ms": 5365.22
+        "total_latency_ms": 5914.34
       },
       {
         "question_id": "q02",
@@ -225,11 +289,11 @@
         "is_answerable": true,
         "abstention_correct": null,
         "stage_timings_ms": {
-          "retrieval_ms": 32.81,
-          "dense_ms": 31.59,
-          "total_retrieval_ms": 32.76
+          "retrieval_ms": 35.92,
+          "dense_ms": 34.55,
+          "total_retrieval_ms": 35.87
         },
-        "total_latency_ms": 32.9
+        "total_latency_ms": 35.99
       }
     ],
     "hybrid_rrf": [
@@ -261,13 +325,13 @@
         "is_answerable": true,
         "abstention_correct": null,
         "stage_timings_ms": {
-          "retrieval_ms": 35.38,
-          "bm25_ms": 5.82,
-          "dense_ms": 28.24,
+          "retrieval_ms": 39.3,
+          "bm25_ms": 5.94,
+          "dense_ms": 32.17,
           "rrf_ms": 0.06,
-          "total_retrieval_ms": 35.32
+          "total_retrieval_ms": 39.25
         },
-        "total_latency_ms": 35.5
+        "total_latency_ms": 39.42
       },
       {
         "question_id": "q02",
@@ -295,13 +359,161 @@
         "is_answerable": true,
         "abstention_correct": null,
         "stage_timings_ms": {
-          "retrieval_ms": 35.51,
-          "bm25_ms": 5.38,
-          "dense_ms": 28.78,
-          "rrf_ms": 0.05,
-          "total_retrieval_ms": 35.46
+          "retrieval_ms": 42.54,
+          "bm25_ms": 4.75,
+          "dense_ms": 36.19,
+          "rrf_ms": 0.06,
+          "total_retrieval_ms": 42.49
         },
-        "total_latency_ms": 35.6
+        "total_latency_ms": 42.61
+      }
+    ],
+    "hybrid_reranked": [
+      {
+        "question_id": "q01",
+        "baseline": "hybrid_reranked",
+        "retrieved_chunk_ids": [
+          "chk_doc_0000320193_000032019323000106_narrative_00002_b6d27ffe08e9",
+          "chk_doc_0000320193_000032019323000106_tblgroup_00004_755ea6bdb4fa",
+          "chk_doc_0000320193_000032019323000106_narrative_00001_5e3e7eb1163f",
+          "chk_doc_0000320193_000032019323000106_narrative_00003_dd5997ae5c4d"
+        ],
+        "gold_chunk_hits": [
+          "chk_doc_0000320193_000032019323000106_tblgroup_00004_755ea6bdb4fa"
+        ],
+        "first_hit_rank": 2,
+        "recall_at_1": 0.0,
+        "recall_at_3": 1.0,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "ndcg_at_5": 0.6309,
+        "answer_text": null,
+        "predicted_numeric_value": null,
+        "expected_numeric_value": "383285",
+        "numeric_exactness": null,
+        "cited_chunk_ids": [],
+        "citation_precision": null,
+        "is_abstention": false,
+        "is_answerable": true,
+        "abstention_correct": null,
+        "stage_timings_ms": {
+          "retrieval_ms": 42.62,
+          "bm25_ms": 4.88,
+          "dense_ms": 36.73,
+          "rrf_ms": 0.05,
+          "total_retrieval_ms": 42.57
+        },
+        "total_latency_ms": 42.73
+      },
+      {
+        "question_id": "q02",
+        "baseline": "hybrid_reranked",
+        "retrieved_chunk_ids": [
+          "chk_doc_0000320193_000032019323000106_narrative_00001_5e3e7eb1163f",
+          "chk_doc_0000320193_000032019323000106_narrative_00002_b6d27ffe08e9",
+          "chk_doc_0000320193_000032019323000106_tblgroup_00004_755ea6bdb4fa",
+          "chk_doc_0000320193_000032019323000106_narrative_00003_dd5997ae5c4d"
+        ],
+        "gold_chunk_hits": [],
+        "first_hit_rank": null,
+        "recall_at_1": 0.0,
+        "recall_at_3": 0.0,
+        "recall_at_5": 0.0,
+        "recall_at_10": 0.0,
+        "ndcg_at_5": 0.0,
+        "answer_text": null,
+        "predicted_numeric_value": null,
+        "expected_numeric_value": "29915",
+        "numeric_exactness": null,
+        "cited_chunk_ids": [],
+        "citation_precision": null,
+        "is_abstention": false,
+        "is_answerable": true,
+        "abstention_correct": null,
+        "stage_timings_ms": {
+          "retrieval_ms": 29.61,
+          "bm25_ms": 4.97,
+          "dense_ms": 23.72,
+          "rrf_ms": 0.04,
+          "total_retrieval_ms": 29.55
+        },
+        "total_latency_ms": 29.68
+      }
+    ],
+    "full_system": [
+      {
+        "question_id": "q01",
+        "baseline": "full_system",
+        "retrieved_chunk_ids": [
+          "chk_doc_0000320193_000032019323000106_narrative_00002_b6d27ffe08e9",
+          "chk_doc_0000320193_000032019323000106_tblgroup_00004_755ea6bdb4fa",
+          "chk_doc_0000320193_000032019323000106_narrative_00001_5e3e7eb1163f",
+          "chk_doc_0000320193_000032019323000106_narrative_00003_dd5997ae5c4d"
+        ],
+        "gold_chunk_hits": [
+          "chk_doc_0000320193_000032019323000106_tblgroup_00004_755ea6bdb4fa"
+        ],
+        "first_hit_rank": 2,
+        "recall_at_1": 0.0,
+        "recall_at_3": 1.0,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "ndcg_at_5": 0.6309,
+        "answer_text": "Apple's total net sales in fiscal year 2023 were $383,285 million.",
+        "predicted_numeric_value": "383285",
+        "expected_numeric_value": "383285",
+        "numeric_exactness": true,
+        "cited_chunk_ids": [
+          "chk_doc_0000320193_000032019323000106_tblgroup_00004_755ea6bdb4fa"
+        ],
+        "citation_precision": 1.0,
+        "is_abstention": false,
+        "is_answerable": true,
+        "abstention_correct": true,
+        "stage_timings_ms": {
+          "retrieval_ms": 27.99,
+          "bm25_ms": 3.69,
+          "dense_ms": 23.4,
+          "rrf_ms": 0.04,
+          "total_retrieval_ms": 27.94,
+          "generation_ms": 42368.88
+        },
+        "total_latency_ms": 42421.95
+      },
+      {
+        "question_id": "q02",
+        "baseline": "full_system",
+        "retrieved_chunk_ids": [
+          "chk_doc_0000320193_000032019323000106_narrative_00001_5e3e7eb1163f",
+          "chk_doc_0000320193_000032019323000106_narrative_00002_b6d27ffe08e9",
+          "chk_doc_0000320193_000032019323000106_tblgroup_00004_755ea6bdb4fa",
+          "chk_doc_0000320193_000032019323000106_narrative_00003_dd5997ae5c4d"
+        ],
+        "gold_chunk_hits": [],
+        "first_hit_rank": null,
+        "recall_at_1": 0.0,
+        "recall_at_3": 0.0,
+        "recall_at_5": 0.0,
+        "recall_at_10": 0.0,
+        "ndcg_at_5": 0.0,
+        "answer_text": "The provided evidence does not include information about Apple's research and development expense for fiscal year 2023.",
+        "predicted_numeric_value": null,
+        "expected_numeric_value": "29915",
+        "numeric_exactness": false,
+        "cited_chunk_ids": [],
+        "citation_precision": 1.0,
+        "is_abstention": true,
+        "is_answerable": true,
+        "abstention_correct": false,
+        "stage_timings_ms": {
+          "retrieval_ms": 39.16,
+          "bm25_ms": 5.39,
+          "dense_ms": 26.71,
+          "rrf_ms": 0.04,
+          "total_retrieval_ms": 39.11,
+          "generation_ms": 17082.32
+        },
+        "total_latency_ms": 17121.69
       }
     ]
   }

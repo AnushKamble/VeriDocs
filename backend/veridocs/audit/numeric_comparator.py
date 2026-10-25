@@ -40,9 +40,9 @@ class NumericComparator:
         # If claim contains no numbers, it is purely narrative
         if not claim_nums:
             return NumericAuditEvaluation(
-                status=AuditStatus.SUPPORTED,
-                is_verified=True,
-                summary="Claim contains no explicit numeric figures; deferred to NLI audit.",
+                status=AuditStatus.NEEDS_REVIEW,
+                is_verified=False,
+                summary="Claim contains no explicit numeric figures; requires NLI audit.",
             )
 
         if not cited_chunks:

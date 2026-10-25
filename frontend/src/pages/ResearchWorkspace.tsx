@@ -63,6 +63,8 @@ export const ResearchWorkspace: React.FC<ResearchWorkspaceProps> = ({ onSelectEv
       case 'partially_supported': return { bg: '#fffbeb', border: '#fde68a', text: '#92400e', badge: '#f59e0b' };
       case 'abstained': return { bg: '#f1f5f9', border: '#cbd5e1', text: '#334155', badge: '#64748b' };
       case 'conflicting_evidence': return { bg: '#fef2f2', border: '#fecaca', text: '#991b1b', badge: '#ef4444' };
+      case 'generation_error': return { bg: '#fef2f2', border: '#fecaca', text: '#991b1b', badge: '#dc2626' };
+      case 'auditor_unavailable': return { bg: '#fffbeb', border: '#fde68a', text: '#92400e', badge: '#d97706' };
       default: return { bg: '#f8fafc', border: '#e2e8f0', text: '#475569', badge: '#94a3b8' };
     }
   };
@@ -77,6 +79,10 @@ export const ResearchWorkspace: React.FC<ResearchWorkspaceProps> = ({ onSelectEv
         return <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', backgroundColor: '#fee2e2', color: '#991b1b', padding: '2px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: 600 }}><XCircle size={12} /> CONTRADICTED</span>;
       case 'INVALID_CITATION':
         return <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', backgroundColor: '#fef3c7', color: '#92400e', padding: '2px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: 600 }}><AlertTriangle size={12} /> INVALID CITATION</span>;
+      case 'AUDITOR_UNAVAILABLE':
+        return <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', backgroundColor: '#fff7ed', color: '#c2410c', padding: '2px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: 600 }}><HelpCircle size={12} /> AUDITOR UNAVAILABLE</span>;
+      case 'NEEDS_REVIEW':
+        return <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', backgroundColor: '#fef3c7', color: '#92400e', padding: '2px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: 600 }}><AlertTriangle size={12} /> NEEDS REVIEW</span>;
       case 'INSUFFICIENT_EVIDENCE':
         return <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', backgroundColor: '#f1f5f9', color: '#475569', padding: '2px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: 600 }}><HelpCircle size={12} /> INSUFFICIENT</span>;
       default:

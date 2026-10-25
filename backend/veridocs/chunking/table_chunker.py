@@ -29,6 +29,8 @@ class TableChunker:
             f"Units: {units_str}",
             f"Columns: {columns_str}",
         ]
+        if table.footnotes:
+            lines.append(f"Footnotes: {' | '.join(table.footnotes)}")
         return "\n".join(lines)
 
     def chunk_table(
@@ -38,7 +40,7 @@ class TableChunker:
         cells: List[TableCell],
         starting_ordinal: int = 1,
     ) -> List[ChunkRecord]:
-        if not cells:
+        if not cells and not table.footnotes:
             return []
 
         # Group cells by row_index
@@ -94,6 +96,35 @@ class TableChunker:
                     source_url=document.source_url,
                     source_locator=f"{table.table_id}_r{chunk_row_indices[0]}-{chunk_row_indices[-1]}",
                     content_hash=compute_sha256(full_chunk_text.encode("utf-8")),
+                    footnotes=table.footnotes,
+                )
+            )
+            ordinal += 1
+
+        # Emit dedicated FOOTNOTE chunk if table has footnotes
+        if table.footnotes:
+            fn_body = "\n".join(f"Footnote {idx+1}: {fn}" for idx, fn in enumerate(table.footnotes))
+            full_fn_text = f"{context_header}\n{fn_body}"
+            fn_hash = compute_sha256(full_fn_text.encode("utf-8"))[:12]
+            chunks.append(
+                ChunkRecord(
+                    chunk_id=f"chk_{document.document_id}_fn_{ordinal:05d}_{fn_hash}",
+                    document_id=document.document_id,
+                    chunk_kind=ChunkKind.FOOTNOTE,
+                    ordinal=ordinal,
+                    section_id=table.section_id,
+                    section_title=f"{table.caption} - Footnotes",
+                    text=full_fn_text,
+                    raw_text=fn_body,
+                    token_count=max(1, len(full_fn_text) // 4),
+                    table_id=table.table_id,
+                    row_labels=["Footnotes"],
+                    column_labels=table.column_headers,
+                    units=table.units_text,
+                    source_url=document.source_url,
+                    source_locator=f"{table.table_id}_footnotes",
+                    content_hash=compute_sha256(full_fn_text.encode("utf-8")),
+                    footnotes=table.footnotes,
                 )
             )
             ordinal += 1

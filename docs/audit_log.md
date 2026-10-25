@@ -232,3 +232,22 @@
 
 
 
+
+
+## 2026-10-25 10:30:00 IST - Independent Forensic Audit & Adversarial Verification
+
+- **Action**: Adversarial, skeptical audit across all 12 mandatory areas specified in Master Specification.
+- **Auditor**: Independent Staff Verification Engineer & Skeptical Reviewer.
+- **Forensic Inspection Findings**:
+  1. *Table Footnote Ingestion*: Footnotes in `<tfoot>` or trailing rows were omitted from `TableRecord` and dropped from chunk headers. Repaired in `TableParser`, `TableRecord`, `TableChunker`, and SQLite schema.
+  2. *Citation Abstention Leak*: When all claims cited fake/hallucinated chunk IDs, `StructuredAnswerer` falsely set `AnswerStatus.PARTIALLY_SUPPORTED`. Repaired to strictly enforce `AnswerStatus.ABSTAINED`.
+  3. *Narrative Claim False Verification on Missing NLI*: `NumericComparator` returned `is_verified=True` for non-numeric narrative claims, which caused `ResponsePolicyEngine` to grant `SUPPORTED` status when NLI was absent. Repaired: `NumericComparator` returns `is_verified=False` / `NEEDS_REVIEW`; `ResponsePolicyEngine` marks narrative claims without NLI as `AUDITOR_UNAVAILABLE` or `INSUFFICIENT_EVIDENCE`.
+  4. *Prompt Boundary Delimitation*: Disallowed `</evidence_chunk>` XML breakout in chunk content by sanitizing to `[/evidence_chunk]`.
+  5. *Generation Provider Resilience*: Added exception handling around `provider.generate()` in `StructuredAnswerer.answer()` to gracefully return `AnswerStatus.GENERATION_ERROR` rather than crashing, and increased default timeout to 120s for CPU inference.
+- **Regression Tests Added**:
+  - `backend/tests/unit/test_audit_regressions.py` (5 tests covering all 5 repaired defects).
+- **Execution Evidence**:
+  - `pytest backend/tests -v`: **119 passed, 0 failed, 0 skipped** in 90.67s.
+  - `cd frontend && npm run build`: Vite production bundle clean (186.20 kB, Exit 0).
+  - `python scripts/run_benchmark.py --split dev --limit 2`: Successfully executed all 5 baselines (`bm25_structured`, `dense_bge`, `hybrid_rrf`, `hybrid_reranked`, `full_system`) with live local Ollama `qwen3:8b`, DeBERTa NLI cross-encoder, BGE embeddings, and MS-MARCO reranker.
+- **Final Audit Status**: **PASSED (ALL 12 MANDATORY AREAS VERIFIED)**.
