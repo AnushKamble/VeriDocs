@@ -92,7 +92,7 @@ To prevent neural model sycophancy and hallucinations, claims and responses are 
 
 ```bash
 # Clone the repository
-git clone https://github.com/example/veridocs.git
+git clone https://github.com/AnushKamble/VeriDocs.git
 cd veridocs
 
 # Install backend dependencies
@@ -212,6 +212,6 @@ Licensed under the [MIT License](LICENSE).
   author = {VeriDocs Engineering Team},
   title = {VeriDocs: Grounded Financial Intelligence Engine with Deterministic Numeric and NLI Claim Auditing},
   year = {2026},
-  url = {https://github.com/example/veridocs}
+  url = {https://github.com/AnushKamble/VeriDocs}
 }
 ```
